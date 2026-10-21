@@ -1,0 +1,557 @@
+/*
+  ============================================================
+  FILE 2 OF 3 — style.css
+  This file controls how everything LOOKS.
+  No logic here — just colors, fonts, spacing, animations.
+
+  HOW CSS WORKS (beginner explanation):
+    selector { property: value; }
+    e.g.  body { background: blue; }
+
+  We use CSS classes (.) to style elements.
+  e.g. .card { ... } styles every element with class="card"
+  ============================================================
+*/
+
+
+/* ============================================================
+   1. RESET
+   Browsers add default spacing (margin/padding) to elements.
+   This removes all of that so we start with a clean slate.
+============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* makes width/height include padding */
+}
+
+
+/* ============================================================
+   2. CSS VARIABLES (Custom Properties)
+   These are like constants — define once, reuse everywhere.
+   If you want to change the glass card look, just edit here.
+============================================================ */
+:root {
+  --glass-bg:     rgba(254, 254, 254, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  --text-main:    #ffffff;
+  --text-dim:     rgba(255, 255, 255, 0.72);
+  --text-dimmer:  rgba(255, 255, 255, 0.48);
+  --radius-card:  24px;
+  --radius-sm:    12px;
+}
+
+
+/* ============================================================
+   3. BODY — the full page canvas
+   Background changes based on weather (controlled by JS
+   adding a class to <body>). Default is a dark purple-blue sky.
+============================================================ */
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  color: var(--text-main);
+  transition: background 1.2s ease; /* smooth colour change on weather update */
+  background: linear-gradient(160deg, #2b5876 0%, #4e4376 100%);
+}
+
+
+/* ============================================================
+   4. BACKGROUND THEMES
+   JS adds one of these class names to <body> depending on
+   the current weather condition and time of day.
+   e.g.  document.body.classList.add("clear-day")
+============================================================ */
+body.clear-day    { background: linear-gradient(160deg, #1a78c2 0%, #56ccf2 50%, #f7971e 100%); }
+body.clear-night  { background: linear-gradient(160deg, #0a0e27 0%, #1a1a4e 50%, #2d2b6e 100%); }
+body.cloudy-day   { background: linear-gradient(160deg, #4b6cb7 0%, #7b8ea8 100%); }
+body.cloudy-night { background: linear-gradient(160deg, #1c2341 0%, #373b52 100%); }
+body.rain         { background: linear-gradient(160deg, #1a2a4a 0%, #2c3e6b 50%, #243b55 100%); }
+body.storm        { background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%); }
+body.fog          { background: linear-gradient(160deg, #606c88 0%, #8e9eab 100%); }
+body.snow         { background: linear-gradient(160deg, #8EC5FC 0%, #bbd8f5 50%, #E0C3FC 100%); }
+
+/* Snow theme needs darker text because the background is light */
+body.snow {
+  --text-main:    #1e293b;
+  --text-dim:     rgba(15, 23, 42, 0.7);
+  --text-dimmer:  rgba(15, 23, 42, 0.45);
+  --glass-bg:     rgba(255, 255, 255, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.5);
+}
+
+
+/* ============================================================
+   5. PAGE WRAPPER
+   Centres the content and limits the max width to 680px
+   so it doesn't stretch too wide on large screens.
+============================================================ */
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 36px 16px 60px;
+}
+
+
+/* ============================================================
+   6. HEADER
+============================================================ */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Small "WEATHERNOW" text above the main title */
+.header-logo {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dimmer);
+  margin-bottom: 6px;
+}
+
+.header h1 {
+  font-family: 'Outfit', sans-serif;
+  /* clamp(min, preferred, max) — scales the font with screen width */
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.header p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+
+/* ============================================================
+   7. SEARCH BOX
+============================================================ */
+.search-wrap {
+  position: relative; /* needed so the dropdown positions relative to this */
+  margin-bottom: 22px;
+}
+
+.search-row {
+  display: flex; /* puts input and button side by side */
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1; /* takes up all available space, leaving room for button */
+  padding: 14px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e293b;
+  outline: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Glow ring when the input is focused (user clicks on it) */
+.search-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5), 0 4px 20px rgba(0, 0, 0, 0.18);
+}
+
+.search-btn {
+  padding: 14px 22px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  background: #0f172a;
+  transform: translateY(-1px); /* slight lift on hover */
+}
+
+
+/* ============================================================
+   8. AUTOCOMPLETE DROPDOWN
+   The list of city suggestions that appears as you type.
+============================================================ */
+.autocomplete {
+  position: absolute;       /* floats below the search row */
+  top: calc(100% + 6px);   /* 6px gap below the input */
+  left: 0;
+  right: 90px;              /* doesn't overlap the Search button */
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  list-style: none;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  z-index: 100;             /* floats above other elements */
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* JS adds/removes "hidden" to show/hide the dropdown */
+.hidden { display: none !important; }
+
+/* Each suggestion item */
+.autocomplete li {
+  padding: 11px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s;
+}
+
+.autocomplete li:last-child { border-bottom: none; }
+
+/* Highlight on hover or keyboard selection */
+.autocomplete li:hover,
+.autocomplete li.active { background: #f1f5f9; }
+
+/* City name (bold) */
+.ac-city {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Region / country (grey, smaller) */
+.ac-region {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+
+/* ============================================================
+   9. ERROR MESSAGE
+============================================================ */
+.error-msg {
+  background: rgba(254, 202, 202, 0.9);
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+
+/* ============================================================
+   10. LOADING INDICATOR
+   A spinning circle shown while waiting for API data.
+============================================================ */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px 0;
+}
+
+/* The spinning circle */
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid rgba(255, 255, 255, 0.3);  /* faint full ring */
+  border-top-color: #fff;                        /* bright top slice */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* The rotation animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader p {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+
+/* ============================================================
+   11. GLASS CARD
+   All the weather panels (current, hourly, forecast, outlook)
+   use this frosted-glass look.
+============================================================ */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);            /* the frosted glass blur */
+  -webkit-backdrop-filter: blur(18px);    /* Safari support */
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: var(--glass-shadow);
+  animation: fadeUp 0.4s ease both;       /* slides in from below when shown */
+}
+
+/* Slide-up + fade-in animation when cards appear */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Small all-caps label at the top of some cards */
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dimmer);
+  margin-bottom: 14px;
+}
+
+
+/* ============================================================
+   12. CURRENT WEATHER CARD — inner layout
+============================================================ */
+
+/* Top row: city name left, updated badge right */
+.current-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.current-city {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.current-time {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.updated-badge {
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 4px 10px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* Big emoji + temperature side by side */
+.current-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 6px;
+}
+
+.current-emoji {
+  font-size: 72px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.current-temp {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(52px, 14vw, 80px);
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 1;
+}
+
+/* Weather description e.g. "Clear sky" */
+.current-desc {
+  font-size: 18px;
+  color: var(--text-dim);
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+/* 3-column stats strip at the bottom of the current card */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 18px;
+}
+
+.stat { text-align: center; }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   13. HOURLY STRIP — next 24 hours
+============================================================ */
+
+/* Horizontal scrollable row */
+.hourly-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;          /* allows horizontal scroll */
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.hourly-scroll::-webkit-scrollbar { height: 4px; }
+.hourly-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+/* Each hour bubble */
+.hour-pill {
+  flex: 0 0 auto;    /* don't shrink — each pill stays its fixed size */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 58px;
+  padding: 12px 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Highlight the current hour */
+.hour-pill.now-pill { background: rgba(255, 255, 255, 0.25); }
+
+.hour-time { font-size: 12px; color: var(--text-dim); }
+.hour-icon { font-size: 20px; }
+.hour-temp { font-size: 14px; font-weight: 700; }
+
+
+/* ============================================================
+   14. 7-DAY FORECAST
+============================================================ */
+.forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* One row per day */
+.forecast-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.15s;
+}
+
+.forecast-row:hover { background: rgba(255, 255, 255, 0.15); }
+
+.fc-day { font-size: 14px; font-weight: 600; }
+
+.fc-icon-desc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-icon { font-size: 22px; }
+
+.fc-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* Min temperature (dimmer) */
+.fc-min {
+  font-size: 14px;
+  color: var(--text-dimmer);
+  font-weight: 500;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Max temperature (bold) */
+.fc-max {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: right;
+}
+
+
+/* ============================================================
+   15. LAST 30 DAYS SUMMARY (Outlook)
+============================================================ */
+.outlook-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.outlook-stat {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px 14px;
+  text-align: center;
+}
+
+.outlook-icon  { font-size: 24px; margin-bottom: 8px; }
+.outlook-value { font-size: 20px; font-weight: 700; margin-bottom: 3px; }
+.outlook-key   { font-size: 12px; color: var(--text-dim); }
+
+.outlook-note {
+  font-size: 12px;
+  color: var(--text-dimmer);
+  text-align: center;
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   16. FOOTER
+============================================================ */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dimmer);
+  margin-top: 30px;
+}
+
+
+/* ============================================================
+   17. RESPONSIVE — adjustments for small screens (phones)
+   @media queries only apply when the screen is ≤ 480px wide.
+============================================================ */
+@media (max-width: 480px) {
+  /* On tiny screens the autocomplete stretches full width */
+  .autocomplete { right: 0; }
+
+  /* Hide min temp column to save space on forecast rows */
+  .fc-min { display: none; }
+  .forecast-row { grid-template-columns: 68px 1fr auto; }
+
+  /* Slightly tighter stats row gap */
+  .stats-row { gap: 6px; }
+}

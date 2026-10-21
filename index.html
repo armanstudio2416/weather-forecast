@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeatherNow — Real-Time Forecast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="header">
+      <p class="header-logo">WeatherNow</p>
+      <h1>Real-Time Forecast</h1>
+      <p>Live conditions · Updated every minute</p>
+    </header>
+
+    <!-- ==================== SEARCH BOX ==================== -->
+    <!--
+      .search-wrap holds:
+        - The text input where the user types a city name
+        - The Search button
+        - The autocomplete dropdown (hidden by default, shown by JS)
+    -->
+    <div class="search-wrap">
+      <div class="search-row">
+        <input
+          type="text"
+          id="cityInput"
+          class="search-input"
+          placeholder="Search a city… e.g. Ludhiana, Mumbai, Delhi"
+          autocomplete="off"
+        />
+        <button id="searchBtn" class="search-btn">Search</button>
+      </div>
+
+      <!-- Autocomplete dropdown list — JS fills this with city suggestions -->
+      <ul id="autocomplete" class="autocomplete hidden"></ul>
+    </div>
+
+    
+    <!-- ==================== ERROR MESSAGE ==================== -->
+    <!--
+      Hidden by default (class="hidden").
+      JS removes "hidden" and sets the text if something goes wrong
+      e.g. city not found, or no internet connection.
+    -->
+    <div id="errorMsg" class="error-msg hidden"></div>
+
+    <div id="loader" class="loader hidden">
+      <div class="spinner"></div>
+      <p>Fetching weather data…</p>
+    </div>
+
+
+    <div id="currentCard" class="card hidden">
+
+      
+      <div class="current-top">
+        <div>
+          <div class="current-city" id="cityName">—</div>
+          <div class="current-time" id="localTime">—</div>
+        </div>
+        <span class="updated-badge" id="updatedBadge">—</span>
+      </div>
+
+      <!-- Big emoji + temperature -->
+      <div class="current-main">
+        <div class="current-emoji" id="currentEmoji">🌤️</div>
+        <div class="current-temp" id="currentTemp">—°</div>
+      </div>
+
+      <!-- Weather description e.g. "Clear sky" -->
+      <div class="current-desc" id="currentDesc">—</div>
+
+     
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-label">Wind</div>
+          <div class="stat-value" id="statWind">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Direction</div>
+          <div class="stat-value" id="statDir">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Day / Night</div>
+          <div class="stat-value" id="statDayNight">—</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="hourlyCard" class="card hidden">
+      <div class="card-label">Next 24 Hours</div>
+      <div class="hourly-scroll" id="hourlyScroll"></div>
+    </div>
+
+   
+    <div id="forecastCard" class="card hidden">
+      <div class="card-label">7-Day Forecast</div>
+      <div class="forecast-list" id="forecastList"></div>
+    </div>
+    <div id="outlookCard" class="card hidden">
+      <div class="card-label">Last 30 Days — Summary</div>
+      <div class="outlook-grid" id="outlookGrid"></div>
+      <p class="outlook-note" id="outlookNote"></p>
+    </div>
+
+    <div class="footer">
+
+  </div><!-- /page -->
+
+  <script src="script.js"></script>
+
+</body>
+</html>
